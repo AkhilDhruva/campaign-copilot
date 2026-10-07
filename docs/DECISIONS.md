@@ -11,3 +11,17 @@ Short records of choices made when the brief was silent or ambiguous. Newest at 
 - **Repo layout.** One git repo at the folder root for Campaign Copilot (`backend/`, `frontend/`, `mcp_server/`, `evals/`, `docs/`). The portfolio site refresh (Phase 2) will be a separate clone of `akhil-portfolio`.
 - **Phase 0 report kept out of git.** `PHASE0_GITHUB_AUDIT.md` names private repos and local paths, so it lives in the git-ignored `private/` folder. The very first local commit was amended before any push to drop it from history; nothing shared was rewritten.
 - **`make` not installed on this PC.** Kept the Makefile for CI and Linux/macOS users and added `manage.py` with the same targets for Windows. Install GNU make with `winget install ezwinports.make` if you prefer `make`.
+
+## 2026-10-07
+
+- **Official Anthropic SDK instead of `langchain-anthropic`.** The model call is one function using structured outputs (`messages.parse`), which is easier to read and explain than a framework wrapper. LangGraph is still the orchestrator. `langchain-anthropic` was removed from the dependencies and `anthropic` added.
+- **Server-side refusal fallbacks not enabled.** The Anthropic reference recommends the `fallbacks` parameter by default on current models. It is left out to keep the structured-output path simple; the client raises a clear error on a refusal. Revisit if real-model runs hit refusals.
+- **Default model `claude-opus-5-5`** when `MOCK_LLM=0`, overridable with `LLM_MODEL`.
+- **MCP transport defaults to in-process.** The agents still speak MCP (JSON-RPC over an in-memory channel). `MCP_TRANSPORT=stdio` launches the server as a subprocess and was verified working. In-process is the default because it is robust on Windows and in CI.
+- **In-memory checkpointer.** `MemorySaver` keeps paused runs in the API process. Fine for a demo; a database checkpointer is the production swap.
+- **BM25 over policy paragraphs rather than embeddings.** Five short files, exact wording matters, no vector database to run. Retrieval still decides which paragraph is cited.
+- **Compliance is rules first, model second.** Flags are deterministic; the model only proposes fixes. This keeps compliance auditable and testable offline.
+- **The mock's first draft is intentionally non-compliant.** It makes the revision loop visible and testable offline.
+- **Projections keep decimals.** The dataset has customers only, so single-branch "product gap" audiences can be under 100 people. Rounding small projections to zero looked broken; showing 0.4 accounts is honest. Noted in the README.
+- **Evals found bugs; the fixes went into the code, not the expectations**, except Preston Hollow, where the expectation itself was wrong (it is one branch, not four).
+- **Demo GIF assembled from browser screenshots** taken during verification. Replace with a screen recording if a smoother one is wanted.
