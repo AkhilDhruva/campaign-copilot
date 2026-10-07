@@ -7,6 +7,8 @@ approve. Every step lands in a tamper-evident audit log.**
 Built for a fictional bank, **Northwind Community Bank**, on synthetic data. This is independent
 portfolio work by Akhil Reddy Gaddam and is not affiliated with any real company.
 
+**Live demo (static replay of a recorded run, no backend):** https://akhil-portfolio-pi-five.vercel.app/campaign-copilot/index.html
+
 ![Demo](docs/demo.gif)
 
 ## The 30-second version

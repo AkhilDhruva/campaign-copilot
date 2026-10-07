@@ -34,3 +34,4 @@ Short records of choices made when the brief was silent or ambiguous. Newest at 
 - **Third flagship is AeroMind FlightLab** (drone sim) rather than the data-center site, because it is a self-contained build with a live link and a repo, and it reads as engineering rather than courseware.
 - **Instructional-design case studies were moved, not deleted.** The whole section now sits below Credentials as "06 - Other work" with a shorter header; the 15-section case studies still open.
 - **Code links point at `AkhilDhruva/campaign-copilot` and `AkhilDhruva/overseer-agentic-memory`.** The first does not exist yet and the second is empty; both need Akhil's OK to push.
+- **Pushed on Akhil's OK (2026-10-07):** `AkhilDhruva/campaign-copilot` created and pushed; `overseer-agentic-memory` received the staged bundle; portfolio PR #6 merged into main for Vercel to redeploy. MIT license on both code repos, per Akhil.
