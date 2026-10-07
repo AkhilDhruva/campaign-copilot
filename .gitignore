@@ -35,3 +35,6 @@ evals/last_run.json
 
 # Portfolio site clone (its own git repo)
 site/
+
+# Overseer public-repo staging (its own git repo)
+overseer-repo/
