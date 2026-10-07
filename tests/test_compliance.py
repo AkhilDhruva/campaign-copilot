@@ -51,7 +51,9 @@ def test_clean_copy_passes():
 def test_guarantee_and_free_are_blocked_with_citations():
     index = PolicyIndex.from_dir(POLICY_DIR)
     bad = _draft(
-        letter="Guaranteed approval and FREE checking for life. Northwind Community Bank. Member FDIC."
+        letter=(
+            "Guaranteed approval and FREE checking for life. Northwind Community Bank. Member FDIC."
+        )
     )
     report = check(bad, "checking", index)
     rules = {i.rule for i in report.issues}

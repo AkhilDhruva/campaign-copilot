@@ -86,7 +86,10 @@ class AuditLog:
 
 
 def verify(path: str | Path | None = None) -> dict[str, Any]:
-    """Walk the chain. Returns {"ok": bool, "records": n, "first_bad_seq": int|None, "reason": str}."""
+    """Walk the chain.
+
+    Returns {"ok": bool, "records": n, "first_bad_seq": int | None, "reason": str}.
+    """
     p = Path(path) if path else default_path()
     if not p.exists():
         return {"ok": True, "records": 0, "first_bad_seq": None, "reason": "empty"}

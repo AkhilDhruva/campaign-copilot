@@ -63,7 +63,8 @@ class CopyDraft(BaseModel):
     email_body: str
     ads: list[Ad] = Field(min_length=2, max_length=2)
     data_citations: list[str] = Field(
-        description="Which data point drove each creative choice, e.g. 'Retirees prefer mail (55% opt-in)'"
+        description="Which data point drove each creative choice, "
+        "e.g. 'Retirees prefer mail (55% opt-in)'"
     )
 
 

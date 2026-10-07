@@ -39,7 +39,7 @@ def test_tampering_is_detected(tmp_path):
     assert not result["ok"] and result["first_bad_seq"] == 2
 
     # Deleting a line breaks the sequence.
-    path.write_text("\n".join(l for i, l in enumerate(lines) if i != 1) + "\n", encoding="utf-8")
+    path.write_text("\n".join(ln for i, ln in enumerate(lines) if i != 1) + "\n", encoding="utf-8")
     assert verify(path)["first_bad_seq"] == 2
 
 

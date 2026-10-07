@@ -150,7 +150,8 @@ def build_audience(ctx: dict[str, Any]) -> AudienceBrief:
                 reason=(
                     f"{row['customers']:,} customers without a {PRODUCT_LABEL[plan.product]}, "
                     f"avg engagement {row['avg_engagement']:.2f}, mail opt-in "
-                    f"{row['direct_mail_opt_in_rate']:.0%}, email opt-in {row['email_opt_in_rate']:.0%}"
+                    f"{row['direct_mail_opt_in_rate']:.0%}, "
+                    f"email opt-in {row['email_opt_in_rate']:.0%}"
                 ),
             )
         )
@@ -180,7 +181,8 @@ def build_audience(ctx: dict[str, Any]) -> AudienceBrief:
         rationale=(
             f"Target the {len(picks)} largest segments without a {PRODUCT_LABEL[plan.product]} at "
             f"{len(branch_ids)} branches. Lead with {primary.replace('_', ' ')} because it has the "
-            f"lowest historical cost per acquired account; follow with {secondary.replace('_', ' ')}."
+            f"lowest historical cost per acquired account; "
+            f"follow with {secondary.replace('_', ' ')}."
         ),
         data_citations=citations,
     )
@@ -217,7 +219,8 @@ def build_copy(ctx: dict[str, Any]) -> CopyDraft:
     else:
         promise = f"A {label} built for {seg_word}s in {city}"
         apy_line = (
-            f"Earn {apy:.2f}% Annual Percentage Yield (APY). APY is accurate as of the date of this "
+            f"Earn {apy:.2f}% Annual Percentage Yield (APY). APY is accurate as of the date "
+            "of this "
             "offer and may change after the account is opened. Fees could reduce earnings."
             if apy
             else ""
@@ -248,9 +251,11 @@ def build_copy(ctx: dict[str, Any]) -> CopyDraft:
     ]
     citations = [
         f"Lead segment is {seg_word} ({top.customers:,} reachable customers) from query_segments",
-        f"Primary channel {audience.primary_channel.replace('_', ' ')} chosen for lowest cost per account "
+        f"Primary channel {audience.primary_channel.replace('_', ' ')} chosen for lowest "
+        "cost per account "
         "from past_campaign_results",
-        f"Letter emphasises branch proximity because {len(audience.branch_ids)} branches were resolved "
+        f"Letter emphasises branch proximity because {len(audience.branch_ids)} branches "
+        "were resolved "
         "by resolve_branches",
     ]
     return CopyDraft(
@@ -272,11 +277,20 @@ def build_fixes(ctx: dict[str, Any]) -> ComplianceFixes:
         if rule == "misleading_guarantee":
             s = "Remove 'guaranteed'. Approval depends on eligibility; say 'subject to approval'."
         elif rule == "free_without_terms":
-            s = "Either drop 'FREE' or state the conditions in the same sentence (e.g. 'no monthly fee with direct deposit')."
+            s = (
+                "Either drop 'FREE' or state the conditions in the same sentence "
+                "(e.g. 'no monthly fee with direct deposit')."
+            )
         elif rule == "apy_without_disclosure":
-            s = "Add the APY disclosure: accuracy date, 'may change after opening', 'fees could reduce earnings'."
+            s = (
+                "Add the APY disclosure: accuracy date, 'may change after opening', "
+                "'fees could reduce earnings'."
+            )
         elif rule == "protected_attribute":
-            s = "Remove the protected-class reference and target by product gap or engagement instead."
+            s = (
+                "Remove the protected-class reference and target by product gap or "
+                "engagement instead."
+            )
         elif rule == "missing_fdic":
             s = "Add 'Member FDIC' to the piece."
         else:
