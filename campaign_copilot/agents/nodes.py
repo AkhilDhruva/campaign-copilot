@@ -199,7 +199,13 @@ async def compliance(state: dict[str, Any], rt: Runtime) -> dict[str, Any]:
         duration_ms=ev["duration_ms"],
     )
     total_caught = state.get("issues_caught", 0) + len(issues)
-    return {"compliance": result, "issues_caught": total_caught, "timeline": [ev]}
+    history = state.get("compliance_history", []) + [result]
+    return {
+        "compliance": result,
+        "compliance_history": history,
+        "issues_caught": total_caught,
+        "timeline": [ev],
+    }
 
 
 # ---------------------------------------------------------------- evaluator
@@ -290,10 +296,10 @@ def business_impact(state: dict[str, Any]) -> dict[str, Any]:
         "channel": primary["channel"],
         "expected_response_rate": primary["response_rate"],
         "expected_conversion_rate": primary["conversion_rate"],
-        "projected_responses": round(responses),
-        "projected_accounts": round(accounts),
+        "projected_responses": round(responses, 1),
+        "projected_accounts": round(accounts, 1),
         "estimated_cost_usd": round(cost, 2),
-        "cost_per_acquired_account_usd": round(cost / accounts, 2) if accounts else None,
+        "cost_per_acquired_account_usd": round(cost / accounts, 2) if accounts >= 0.05 else None,
         "historical_cost_per_account_usd": primary["cost_per_account"],
         "compliance_issues_caught": state.get("issues_caught", 0),
         "revisions": state.get("revision", 0),

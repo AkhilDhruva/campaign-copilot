@@ -24,12 +24,13 @@ from campaign_copilot.agents.schemas import (
     SegmentPick,
 )
 
+# Checked in this order: specific products first, "checking" last because "deposits" is generic.
 PRODUCT_WORDS = {
-    "checking": ["checking", "deposit", "deposits", "dda"],
-    "savings": ["savings", "high-yield", "high yield", "apy", "money market"],
-    "credit_card": ["credit card", "card", "cards"],
-    "mortgage": ["mortgage", "home loan", "refinance", "refi"],
-    "auto_loan": ["auto", "car loan", "vehicle"],
+    "credit_card": [r"credit cards?", r"\bcards?\b"],
+    "auto_loan": [r"\bauto\b", r"car loans?", r"vehicle"],
+    "mortgage": [r"mortgages?", r"home loans?", r"refinanc", r"\brefi\b"],
+    "savings": [r"savings", r"high-?yield", r"\bapy\b", r"money market"],
+    "checking": [r"checking", r"deposits?", r"\bdda\b"],
 }
 
 PRODUCT_LABEL = {
@@ -40,11 +41,20 @@ PRODUCT_LABEL = {
     "auto_loan": "auto loan",
 }
 
+# Longer names first so "dallas-fort worth" wins over "dallas". Branch names are included so
+# "Preston Hollow" resolves to that one branch.
 PLACES = [
     "dallas-fort worth",
     "dfw",
-    "dallas",
+    "preston hollow",
+    "oak lawn",
+    "lakewood",
+    "uptown",
+    "las colinas",
+    "denton square",
+    "plano legacy",
     "fort worth",
+    "dallas",
     "plano",
     "arlington",
     "irving",
@@ -58,8 +68,8 @@ PLACES = [
 
 def detect_product(goal: str) -> str:
     g = goal.lower()
-    for product, words in PRODUCT_WORDS.items():
-        if any(w in g for w in words):
+    for product, patterns in PRODUCT_WORDS.items():
+        if any(re.search(p, g) for p in patterns):
             return product
     return "checking"
 
@@ -209,15 +219,16 @@ def build_copy(ctx: dict[str, Any]) -> CopyDraft:
     name, apy, hook = _offer(plan.product)
     label = PRODUCT_LABEL[plan.product]
     top = audience.segments[0]
-    seg_word = top.segment.replace("_", " ")
+    seg_word = top.segment.replace("_", " ")  # used in citations only, never in customer copy
     city = plan.location if plan.location != "all" else "North Texas"
+    ehl = " Equal Housing Lender." if plan.product == "mortgage" else ""
 
     if revision == 0:
         # First draft: contains two things the rulebook will catch on purpose.
         promise = f"Guaranteed approval and FREE {label} for life"
         apy_line = f"Earn {apy}% APY" if apy else ""
     else:
-        promise = f"A {label} built for {seg_word}s in {city}"
+        promise = f"A {label} built for your neighbors in {city}"
         apy_line = (
             f"Earn {apy:.2f}% Annual Percentage Yield (APY). APY is accurate as of the date "
             "of this "
@@ -233,23 +244,26 @@ def build_copy(ctx: dict[str, Any]) -> CopyDraft:
         f"Open your {name} online in minutes or visit any of our {len(audience.branch_ids)} nearby "
         f"branches. Offer available to new {label} customers through {plan.timeframe}.\n\n"
         f"Warm regards,\nThe Northwind {city} team\n\n"
-        f"Member FDIC. Equal Housing Lender."
+        f"Member FDIC.{ehl}"
     )
     email_subject = f"{name}: {hook[:60]}"
     email_body = (
         f"Hi there,\n\n{promise}. {hook[0].upper() + hook[1:]} when you open a {name} "
         f"before the end of {plan.timeframe}. {apy_line}\n\n"
-        f"Open online or stop by your {city} branch.\n\nNorthwind Community Bank · Member FDIC\n"
-        "Unsubscribe | Northwind Community Bank, 100 Main Street, Dallas, TX 75201"
+        f"Open online or stop by your {city} branch.\n\nNorthwind Community Bank · Member FDIC."
+        f"{ehl}\nUnsubscribe | Northwind Community Bank, 100 Main Street, Dallas, TX 75201"
     )
     # Ads are too short to carry the full APY disclosure, so they never quote the rate.
     ad_hook = "high-yield savings with no minimum balance" if apy else hook
     ads = [
-        Ad(headline=f"{name}", body=f"{promise}. {ad_hook[0].upper() + ad_hook[1:]}. Member FDIC."),
+        Ad(
+            headline=f"{name}",
+            body=f"{promise}. {ad_hook[0].upper() + ad_hook[1:]}. Member FDIC.{ehl}",
+        ),
         Ad(
             headline=f"{city} {label}s, done right",
             body=f"Join your neighbors at Northwind. {ad_hook[0].upper() + ad_hook[1:]}. "
-            "Terms apply. Member FDIC.",
+            f"Terms apply. Member FDIC.{ehl}",
         ),
     ]
     citations = [

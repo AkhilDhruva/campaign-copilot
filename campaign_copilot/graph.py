@@ -35,6 +35,7 @@ class CampaignState(TypedDict, total=False):
     copy: dict[str, Any]
     drafts: list[dict[str, Any]]
     compliance: dict[str, Any]
+    compliance_history: list[dict[str, Any]]  # one report per draft, in order
     evaluation: dict[str, Any]
     feedback: list[str]
     revision: int

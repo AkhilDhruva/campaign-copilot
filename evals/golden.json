@@ -1,0 +1,25 @@
+{
+  "description": "Twenty marketer goals with the properties a correct run must have. Checked offline in MOCK_LLM=1 mode so CI is deterministic and free.",
+  "goals": [
+    {"id": "g01", "goal": "Grow checking deposits 10% at our Dallas branches this quarter", "product": "checking", "branches": 4, "primary_channel_in": ["direct_mail", "email"]},
+    {"id": "g02", "goal": "Open 300 new high-yield savings accounts in Plano this quarter", "product": "savings", "branches": 1, "apy_disclosed": true},
+    {"id": "g03", "goal": "Drive credit card sign-ups among small businesses in Fort Worth", "product": "credit_card", "branches": 1},
+    {"id": "g04", "goal": "Win 50 mortgage refinances in Frisco by March", "product": "mortgage", "branches": 1, "equal_housing": true},
+    {"id": "g05", "goal": "Increase auto loan originations 15% across DFW next quarter", "product": "auto_loan", "branches": 8},
+    {"id": "g06", "goal": "Add 500 checking accounts bank-wide this year", "product": "checking", "branches": 12},
+    {"id": "g07", "goal": "Lift savings balances 8% at Denton Square this quarter", "product": "savings", "branches": 1, "apy_disclosed": true},
+    {"id": "g08", "goal": "Grow checking deposits 5% in Arlington this month", "product": "checking", "branches": 1},
+    {"id": "g09", "goal": "Launch a credit card campaign for Irving customers next quarter", "product": "credit_card", "branches": 1},
+    {"id": "g10", "goal": "Get 40 new mortgages from McKinney families by June 2027", "product": "mortgage", "branches": 1, "equal_housing": true},
+    {"id": "g11", "goal": "Boost auto refinance volume in Waco this quarter", "product": "auto_loan", "branches": 1},
+    {"id": "g12", "goal": "Grow deposits 12% at our Dallas-Fort Worth branches this quarter", "product": "checking", "branches": 8},
+    {"id": "g13", "goal": "Open 200 savings accounts in North Texas by year end", "product": "savings", "branches": 4, "apy_disclosed": true},
+    {"id": "g14", "goal": "Increase checking penetration at Preston Hollow this quarter", "product": "checking", "branches": 1},
+    {"id": "g15", "goal": "Cross-sell credit cards to Plano checking customers this quarter", "product": "credit_card", "branches": 1},
+    {"id": "g16", "goal": "Win 25 home loan refinances in Dallas next quarter", "product": "mortgage", "branches": 4, "equal_housing": true},
+    {"id": "g17", "goal": "Grow checking deposits 10% in Springfield this quarter", "product": "checking", "branches": 12, "note": "unknown city falls back to all branches"},
+    {"id": "g18", "goal": "Acquire 1,000 new checking customers across all branches this year", "product": "checking", "branches": 12},
+    {"id": "g19", "goal": "Raise high-yield savings sign-ups 20% in Fort Worth this quarter", "product": "savings", "branches": 1, "apy_disclosed": true},
+    {"id": "g20", "goal": "Promote car loans to Frisco customers next month", "product": "auto_loan", "branches": 1}
+  ]
+}

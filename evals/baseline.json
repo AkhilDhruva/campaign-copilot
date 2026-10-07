@@ -1,0 +1,4 @@
+{
+  "min_score": 0.95,
+  "note": "CI fails if the fraction of passed checks across all golden goals drops below min_score."
+}

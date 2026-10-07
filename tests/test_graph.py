@@ -34,6 +34,8 @@ async def test_run_pauses_for_approval_then_publishes(tmp_path):
         # First draft had deliberate problems; revision 1 is clean.
         assert state["revision"] == 1
         assert len(state["drafts"]) == 2
+        assert len(state["compliance_history"]) == 2
+        assert not state["compliance_history"][0]["passed"]
         assert state["compliance"]["passed"] is True
         assert state["issues_caught"] >= 2
         assert state["evaluation"]["decision"] == "accept"

@@ -31,3 +31,4 @@ Thumbs.db
 
 # Local-only notes (audit reports with private repo names and paths)
 private/
+evals/last_run.json
