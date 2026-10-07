@@ -1,0 +1,33 @@
+# Secrets
+.env
+*.env.local
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+dist/
+build/
+
+# Generated data and logs
+data/*.db
+data/*.db-journal
+logs/
+*.jsonl
+!evals/**/*.jsonl
+
+# Node
+frontend/node_modules/
+frontend/dist/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Local-only notes (audit reports with private repo names and paths)
+private/
