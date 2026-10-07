@@ -136,3 +136,7 @@ manage.py           Cross-platform task runner (data, test, lint, eval, api, che
 | FastAPI backend and React front end | done |
 | Golden evals and CI | done |
 | Campaign visuals in `assets/` (generated separately, not part of the demo) | pending |
+
+## License
+
+MIT. See `LICENSE`.
