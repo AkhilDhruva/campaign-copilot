@@ -1,0 +1,13 @@
+NORTHWIND COMMUNITY BANK - MARKETING POLICY 05
+Channel consent and contact frequency
+
+5.1 Email may only be sent to customers who have opted in to email marketing. Direct mail may
+only be sent to customers who have not opted out of mail.
+
+5.2 No customer may receive more than one marketing contact per 30 days across all channels.
+Audience queries must exclude anyone contacted in the last 30 days.
+
+5.3 Every email must include an unsubscribe link and the bank's postal address (CAN-SPAM).
+
+5.4 Digital ads must not use audience lists that include customers who opted out of
+behavioural advertising.
