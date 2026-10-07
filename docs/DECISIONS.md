@@ -25,3 +25,12 @@ Short records of choices made when the brief was silent or ambiguous. Newest at 
 - **Projections keep decimals.** The dataset has customers only, so single-branch "product gap" audiences can be under 100 people. Rounding small projections to zero looked broken; showing 0.4 accounts is honest. Noted in the README.
 - **Evals found bugs; the fixes went into the code, not the expectations**, except Preston Hollow, where the expectation itself was wrong (it is one branch, not four).
 - **Demo GIF assembled from browser screenshots** taken during verification. Replace with a screen recording if a smoother one is wanted.
+
+## 2026-10-07, Phase 2 (portfolio site)
+
+- **Site cloned into `site/` inside this folder** and git-ignored by the Campaign Copilot repo, so both repos live under one workspace. Work is on branch `portfolio-2026-refresh`; nothing pushed.
+- **Campaign Copilot "Try it" is a static replay embedded in the site** (`site/campaign-copilot/`, built from `frontend/` with `base: "./"`). It needs no backend, so the portfolio can stay on Vercel's static hosting. The page says so and points to the repo for the live agents.
+- **Overseer demo is a standalone page** (`site/overseer-demo.html`) using the browser's Web Crypto API for SHA-256. It mirrors the Python audit log's hashing rule (previous hash + canonical JSON) so the two demos tell one story.
+- **Third flagship is AeroMind FlightLab** (drone sim) rather than the data-center site, because it is a self-contained build with a live link and a repo, and it reads as engineering rather than courseware.
+- **Instructional-design case studies were moved, not deleted.** The whole section now sits below Credentials as "06 - Other work" with a shorter header; the 15-section case studies still open.
+- **Code links point at `AkhilDhruva/campaign-copilot` and `AkhilDhruva/overseer-agentic-memory`.** The first does not exist yet and the second is empty; both need Akhil's OK to push.

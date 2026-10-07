@@ -7,7 +7,7 @@ import type { AuditRecord, RunState, TimelineEvent } from "./types";
 const STEP_DELAY_MS = 650;
 
 async function load<T>(name: string): Promise<T> {
-  const res = await fetch(`/demo/${name}.json`);
+  const res = await fetch(`demo/${name}.json`);
   if (!res.ok) throw new Error(`replay fixture ${name} missing`);
   return res.json() as Promise<T>;
 }
