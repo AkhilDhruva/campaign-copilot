@@ -46,14 +46,29 @@ CHANNEL_ECON = {
     "email": {"cost": 0.04, "response": 0.018, "convert": 0.30},
     "digital_ad": {"cost": 0.19, "response": 0.012, "convert": 0.25},
 }
-PRODUCT_LIFT = {"checking": 1.15, "savings": 1.05, "credit_card": 0.85, "mortgage": 0.55, "auto_loan": 0.75}
+PRODUCT_LIFT = {
+    "checking": 1.15,
+    "savings": 1.05,
+    "credit_card": 0.85,
+    "mortgage": 0.55,
+    "auto_loan": 0.75,
+}
 
 OFFERS = {
-    "checking": [("$200 bonus for new checking with direct deposit", None), ("No-fee checking for 12 months", None)],
+    "checking": [
+        ("$200 bonus for new checking with direct deposit", None),
+        ("No-fee checking for 12 months", None),
+    ],
     "savings": [("4.10% APY high-yield savings", 4.10), ("3.75% APY savings, no minimum", 3.75)],
     "credit_card": [("0% intro APR for 15 months", None), ("2% cash back on everything", None)],
-    "mortgage": [("Rate-lock refinance review", None), ("First-time buyer closing-cost credit", None)],
-    "auto_loan": [("5.49% APR auto refinance", None), ("90 days no payment on new auto loans", None)],
+    "mortgage": [
+        ("Rate-lock refinance review", None),
+        ("First-time buyer closing-cost credit", None),
+    ],
+    "auto_loan": [
+        ("5.49% APR auto refinance", None),
+        ("90 days no payment on new auto loans", None),
+    ],
 }
 
 
@@ -74,8 +89,20 @@ def _customer(rng: random.Random, cid: int) -> tuple:
     }[segment]
     has = tuple(int(rng.random() < x) for x in p)
 
-    base_chk = {"young_professional": 3200, "family": 5400, "retiree": 7800, "small_business": 14000, "student": 650}
-    base_sav = {"young_professional": 6500, "family": 11000, "retiree": 42000, "small_business": 21000, "student": 900}
+    base_chk = {
+        "young_professional": 3200,
+        "family": 5400,
+        "retiree": 7800,
+        "small_business": 14000,
+        "student": 650,
+    }
+    base_sav = {
+        "young_professional": 6500,
+        "family": 11000,
+        "retiree": 42000,
+        "small_business": 21000,
+        "student": 900,
+    }
     chk = round(rng.lognormvariate(0, 0.9) * base_chk[segment], 2) if has[0] else 0.0
     sav = round(rng.lognormvariate(0, 1.0) * base_sav[segment], 2) if has[1] else 0.0
 
@@ -92,14 +119,33 @@ def _customer(rng: random.Random, cid: int) -> tuple:
     last_contact = rng.randint(3, 240)
 
     return (
-        cid, branch_id, segment, tenure, *has, chk, sav, round(engagement, 3), mail_opt, email_opt, last_contact,
+        cid,
+        branch_id,
+        segment,
+        tenure,
+        *has,
+        chk,
+        sav,
+        round(engagement, 3),
+        mail_opt,
+        email_opt,
+        last_contact,
     )
 
 
 def _campaigns(rng: random.Random) -> list[tuple]:
     rows = []
     cid = 1
-    quarters = ["2024-Q3", "2024-Q4", "2025-Q1", "2025-Q2", "2025-Q3", "2025-Q4", "2026-Q1", "2026-Q2"]
+    quarters = [
+        "2024-Q3",
+        "2024-Q4",
+        "2025-Q1",
+        "2025-Q2",
+        "2025-Q3",
+        "2025-Q4",
+        "2026-Q1",
+        "2026-Q2",
+    ]
     for q in quarters:
         for _ in range(6):
             product = rng.choices(PRODUCTS, weights=[0.35, 0.25, 0.18, 0.10, 0.12])[0]
@@ -122,7 +168,23 @@ def _campaigns(rng: random.Random) -> list[tuple]:
             name = f"{q} {product.replace('_', ' ').title()} {channel.replace('_', ' ').title()}"
             if branch_id:
                 name += f" (branch {branch_id})"
-            rows.append((cid, name, q, product, channel, branch_id, segment, offer, apy, sent, responses, opened, cost))
+            rows.append(
+                (
+                    cid,
+                    name,
+                    q,
+                    product,
+                    channel,
+                    branch_id,
+                    segment,
+                    offer,
+                    apy,
+                    sent,
+                    responses,
+                    opened,
+                    cost,
+                )
+            )
             cid += 1
     return rows
 

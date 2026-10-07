@@ -12,8 +12,6 @@ import sqlite3
 from pathlib import Path
 from typing import Any
 
-DEFAULT_DB = Path(os.environ.get("NORTHWIND_DB", "data/northwind.db"))
-
 PRODUCT_COLUMNS = {
     "checking": "has_checking",
     "savings": "has_savings",
@@ -23,8 +21,13 @@ PRODUCT_COLUMNS = {
 }
 
 
+def default_db() -> Path:
+    """Database path from the NORTHWIND_DB environment variable, read at call time."""
+    return Path(os.environ.get("NORTHWIND_DB", "data/northwind.db"))
+
+
 def _connect(db_path: str | Path | None = None) -> sqlite3.Connection:
-    path = Path(db_path) if db_path else DEFAULT_DB
+    path = Path(db_path) if db_path else default_db()
     if not path.exists():
         raise FileNotFoundError(f"{path} not found. Run `python manage.py data` first.")
     con = sqlite3.connect(f"file:{path}?mode=ro", uri=True)
@@ -87,7 +90,9 @@ def query_segments(
     if product_gap:
         col = PRODUCT_COLUMNS.get(product_gap)
         if not col:
-            raise ValueError(f"unknown product {product_gap!r}; choose from {sorted(PRODUCT_COLUMNS)}")
+            raise ValueError(
+                f"unknown product {product_gap!r}; choose from {sorted(PRODUCT_COLUMNS)}"
+            )
         where += f" AND {col} = 0"
     if min_engagement is not None:
         where += " AND digital_engagement >= ?"
@@ -110,7 +115,8 @@ def query_segments(
         by_segment = [
             dict(r)
             for r in con.execute(
-                f"SELECT segment, {agg} FROM customers {where} GROUP BY segment ORDER BY customers DESC", params
+                f"SELECT segment, {agg} FROM customers {where} GROUP BY segment ORDER BY customers DESC",
+                params,
             )
         ]
     return {
@@ -140,13 +146,15 @@ def branch_performance(branch_ids: list[int] | None = None, db_path=None) -> lis
                (SELECT COALESCE(SUM(accounts_opened),0) FROM campaigns k WHERE k.branch_id = b.branch_id)
                    AS accounts_opened_from_branch_campaigns
         FROM branches b LEFT JOIN customers c ON c.branch_id = b.branch_id
-        WHERE 1=1 {bf.replace('branch_id', 'b.branch_id')}
+        WHERE 1=1 {bf.replace("branch_id", "b.branch_id")}
         GROUP BY b.branch_id ORDER BY b.branch_id
     """
     with _connect(db_path) as con:
         rows = [dict(r) for r in con.execute(sql, bp)]
     for r in rows:
-        r["checking_penetration"] = round(r["checking_holders"] / r["customers"], 3) if r["customers"] else 0.0
+        r["checking_penetration"] = (
+            round(r["checking_holders"] / r["customers"], 3) if r["customers"] else 0.0
+        )
     return rows
 
 
@@ -174,7 +182,10 @@ def past_campaign_results(
         params.append(segment)
 
     with _connect(db_path) as con:
-        campaigns = [dict(r) for r in con.execute(f"SELECT * FROM campaigns {where} ORDER BY quarter", params)]
+        campaigns = [
+            dict(r)
+            for r in con.execute(f"SELECT * FROM campaigns {where} ORDER BY quarter", params)
+        ]
         rollup = [
             dict(r)
             for r in con.execute(
@@ -189,7 +200,12 @@ def past_campaign_results(
             )
         ]
     return {
-        "filters": {"product": product, "channel": channel, "branch_ids": branch_ids, "segment": segment},
+        "filters": {
+            "product": product,
+            "channel": channel,
+            "branch_ids": branch_ids,
+            "segment": segment,
+        },
         "campaign_count": len(campaigns),
         "by_channel": rollup,
         "campaigns": campaigns,

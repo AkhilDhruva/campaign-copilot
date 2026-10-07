@@ -29,7 +29,7 @@ model outputs so the demo, tests and evals work offline and cost nothing. Set `M
 | Module | State |
 |---|---|
 | Synthetic data (5,000 customers, 12 branches, 48 past campaigns) | done |
-| MCP server (`query_segments`, `branch_performance`, `past_campaign_results`) | in progress |
+| MCP server (`resolve_branches`, `query_segments`, `branch_performance`, `past_campaign_results`) | done |
 | LangGraph workflow (planner, audience, copy, compliance, evaluator, human approval) | planned |
 | Hash-chained audit log | planned |
 | FastAPI backend and React front end | planned |

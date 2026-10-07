@@ -29,7 +29,9 @@ TARGETS = {
     "test": lambda: (TARGETS["data"](), run(PY, "-m", "pytest", "-q", env={"MOCK_LLM": "1"})),
     "lint": lambda: run(PY, "-m", "ruff", "check", "."),
     "eval": lambda: (TARGETS["data"](), run(PY, "-m", "evals.run", env={"MOCK_LLM": "1"})),
-    "api": lambda: run(PY, "-m", "uvicorn", "campaign_copilot.api.main:app", "--reload", "--port", "8000"),
+    "api": lambda: run(
+        PY, "-m", "uvicorn", "campaign_copilot.api.main:app", "--reload", "--port", "8000"
+    ),
     "check": lambda: (TARGETS["lint"](), TARGETS["test"](), TARGETS["eval"]()),
 }
 

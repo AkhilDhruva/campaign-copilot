@@ -19,12 +19,18 @@ def test_query_segments_product_gap(db_path):
     # Customers without checking have zero checking balance by construction.
     assert no_checking["avg_checking_balance"] == 0
     assert {r["segment"] for r in no_checking["by_segment"]} <= {
-        "young_professional", "family", "retiree", "small_business", "student",
+        "young_professional",
+        "family",
+        "retiree",
+        "small_business",
+        "student",
     }
 
 
 def test_query_segments_filters_compose(db_path):
-    r = q.query_segments(branch_ids=[1, 2, 3, 4], product_gap="checking", channel="direct_mail", db_path=db_path)
+    r = q.query_segments(
+        branch_ids=[1, 2, 3, 4], product_gap="checking", channel="direct_mail", db_path=db_path
+    )
     assert r["customers"] > 0
     assert r["direct_mail_opt_in_rate"] == 1.0
     assert r["filters"]["branch_ids"] == [1, 2, 3, 4]
