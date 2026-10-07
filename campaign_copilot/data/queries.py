@@ -52,7 +52,8 @@ def resolve_branches(
                 rows = con.execute("SELECT * FROM branches WHERE metro = 'Dallas-Fort Worth'")
             else:
                 rows = con.execute(
-                    "SELECT * FROM branches WHERE lower(city) = ? OR lower(name) LIKE ? OR lower(metro) = ?",
+                    "SELECT * FROM branches WHERE lower(city) = ? "
+                    "OR lower(name) LIKE ? OR lower(metro) = ?",
                     (loc, f"%{loc}%", loc),
                 )
         else:
@@ -106,8 +107,10 @@ def query_segments(
 
     agg = (
         "COUNT(*) AS customers, ROUND(AVG(checking_balance),2) AS avg_checking_balance, "
-        "ROUND(AVG(savings_balance),2) AS avg_savings_balance, ROUND(AVG(digital_engagement),3) AS avg_engagement, "
-        "ROUND(AVG(tenure_years),1) AS avg_tenure_years, ROUND(AVG(direct_mail_opt_in),3) AS direct_mail_opt_in_rate, "
+        "ROUND(AVG(savings_balance),2) AS avg_savings_balance, "
+        "ROUND(AVG(digital_engagement),3) AS avg_engagement, "
+        "ROUND(AVG(tenure_years),1) AS avg_tenure_years, "
+        "ROUND(AVG(direct_mail_opt_in),3) AS direct_mail_opt_in_rate, "
         "ROUND(AVG(email_opt_in),3) AS email_opt_in_rate"
     )
     with _connect(db_path) as con:
@@ -115,7 +118,8 @@ def query_segments(
         by_segment = [
             dict(r)
             for r in con.execute(
-                f"SELECT segment, {agg} FROM customers {where} GROUP BY segment ORDER BY customers DESC",
+                f"SELECT segment, {agg} FROM customers {where} "
+                "GROUP BY segment ORDER BY customers DESC",
                 params,
             )
         ]
@@ -143,7 +147,8 @@ def branch_performance(branch_ids: list[int] | None = None, db_path=None) -> lis
                ROUND(SUM(c.savings_balance), 2) AS savings_deposits,
                ROUND(AVG(c.digital_engagement), 3) AS avg_engagement,
                (SELECT COUNT(*) FROM campaigns k WHERE k.branch_id = b.branch_id) AS past_campaigns,
-               (SELECT COALESCE(SUM(accounts_opened),0) FROM campaigns k WHERE k.branch_id = b.branch_id)
+               (SELECT COALESCE(SUM(accounts_opened),0) FROM campaigns k
+                    WHERE k.branch_id = b.branch_id)
                    AS accounts_opened_from_branch_campaigns
         FROM branches b LEFT JOIN customers c ON c.branch_id = b.branch_id
         WHERE 1=1 {bf.replace("branch_id", "b.branch_id")}
@@ -191,7 +196,8 @@ def past_campaign_results(
             for r in con.execute(
                 f"""SELECT channel, COUNT(*) AS campaigns, SUM(sent_count) AS sent,
                            ROUND(1.0*SUM(response_count)/SUM(sent_count), 4) AS response_rate,
-                           ROUND(1.0*SUM(accounts_opened)/MAX(SUM(response_count),1), 4) AS conversion_rate,
+                           ROUND(1.0*SUM(accounts_opened)/MAX(SUM(response_count),1), 4)
+                               AS conversion_rate,
                            SUM(accounts_opened) AS accounts_opened,
                            ROUND(SUM(cost_usd), 2) AS cost_usd,
                            ROUND(SUM(cost_usd)/MAX(SUM(accounts_opened),1), 2) AS cost_per_account

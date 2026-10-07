@@ -79,7 +79,8 @@ def _customer(rng: random.Random, cid: int) -> tuple:
     tenure = round(rng.lognormvariate(1.2, 0.8), 1)
     tenure = min(tenure, 38.0)
 
-    # Product mix depends on the segment. Students rarely have mortgages; retirees rarely need auto loans.
+    # Product mix depends on the segment. Students rarely have mortgages;
+    # retirees rarely need auto loans.
     p = {
         "young_professional": (0.78, 0.55, 0.50, 0.12, 0.30),
         "family": (0.85, 0.70, 0.55, 0.45, 0.40),
