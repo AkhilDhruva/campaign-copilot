@@ -121,3 +121,5 @@ mark { background: var(--mark); padding: 0 2px; border-radius: 3px; }
 .audit .hash { font-family: var(--mono); color: var(--muted); }
 
 footer { margin-top: 28px; text-align: center; }
+.notice { margin: 12px 0; padding: 10px 14px; background: var(--wait-bg); color: var(--wait); border-radius: var(--radius); font-size: 13.5px; }
+a.pill { text-decoration: none; }

@@ -1,14 +1,27 @@
 import { useEffect, useState } from "react";
 import { api } from "../api";
+import { replay } from "../replay";
 import type { AuditRecord, VerifyResult } from "../types";
 
-export function AuditView({ runId }: { runId: string | null }) {
+export function AuditView({ runId, demo }: { runId: string | null; demo: boolean }) {
   const [records, setRecords] = useState<AuditRecord[]>([]);
   const [verify, setVerify] = useState<VerifyResult | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const refresh = async () => {
+    setError(null);
     try {
+      if (demo) {
+        const recs = await replay.audit();
+        setRecords(recs);
+        setVerify({
+          ok: true,
+          records: recs.length,
+          first_bad_seq: null,
+          reason: "recorded chain, verified when it was captured",
+        });
+        return;
+      }
       setVerify(await api.verify());
       if (runId) setRecords(await api.audit(runId));
     } catch (e) {
@@ -19,7 +32,7 @@ export function AuditView({ runId }: { runId: string | null }) {
   useEffect(() => {
     void refresh();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [runId]);
+  }, [runId, demo]);
 
   return (
     <div className="audit">
@@ -27,16 +40,18 @@ export function AuditView({ runId }: { runId: string | null }) {
         <button onClick={refresh}>Verify chain</button>
         {verify && (
           <span className={`pill ${verify.ok ? "ok" : "bad"}`}>
-            {verify.ok ? "intact" : `BROKEN at #${verify.first_bad_seq}`} · {verify.records} records · {verify.reason}
+            {verify.ok ? "intact" : `BROKEN at #${verify.first_bad_seq}`} · {verify.records}{" "}
+            records · {verify.reason}
           </span>
         )}
         {error && <span className="pill bad">{error}</span>}
       </div>
       <p className="tiny">
-        Each record's hash covers the previous hash plus its own content. Open <code>logs/audit.jsonl</code>,
-        change any character, and press Verify: the chain breaks at that line.
+        Each record's hash covers the previous hash plus its own content. Open{" "}
+        <code>logs/audit.jsonl</code>, change any character, and press Verify: the chain breaks
+        at that line.
       </p>
-      {runId ? (
+      {records.length > 0 ? (
         <table>
           <thead>
             <tr>
