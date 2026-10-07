@@ -200,6 +200,7 @@ def past_campaign_results(
                                AS conversion_rate,
                            SUM(accounts_opened) AS accounts_opened,
                            ROUND(SUM(cost_usd), 2) AS cost_usd,
+                           ROUND(SUM(cost_usd)/MAX(SUM(sent_count),1), 4) AS cost_per_contact,
                            ROUND(SUM(cost_usd)/MAX(SUM(accounts_opened),1), 2) AS cost_per_account
                     FROM campaigns {where} GROUP BY channel ORDER BY cost_per_account""",
                 params,

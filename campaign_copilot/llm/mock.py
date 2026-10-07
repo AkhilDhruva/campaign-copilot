@@ -242,11 +242,14 @@ def build_copy(ctx: dict[str, Any]) -> CopyDraft:
         f"Open online or stop by your {city} branch.\n\nNorthwind Community Bank · Member FDIC\n"
         "Unsubscribe | Northwind Community Bank, 100 Main Street, Dallas, TX 75201"
     )
+    # Ads are too short to carry the full APY disclosure, so they never quote the rate.
+    ad_hook = "high-yield savings with no minimum balance" if apy else hook
     ads = [
-        Ad(headline=f"{name}", body=f"{promise}. {hook[0].upper() + hook[1:]}. Member FDIC."),
+        Ad(headline=f"{name}", body=f"{promise}. {ad_hook[0].upper() + ad_hook[1:]}. Member FDIC."),
         Ad(
             headline=f"{city} {label}s, done right",
-            body=f"Join your neighbors at Northwind. {hook[0].upper() + hook[1:]}. Terms apply.",
+            body=f"Join your neighbors at Northwind. {ad_hook[0].upper() + ad_hook[1:]}. "
+            "Terms apply. Member FDIC.",
         ),
     ]
     citations = [
